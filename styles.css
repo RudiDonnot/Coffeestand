@@ -501,12 +501,14 @@ img {
 
 .label {
   position: absolute;
-  top: -35px;
-  width: 180px;
-  left: -40px;
+  top: -55px;
   text-align: center;
   font-size: 14px;
   font-style: italic;
+  width: max-content; /* ou width: auto */
+  max-width: none; /* enlève toute limite de largeur */
+  white-space: nowrap; /* empêche le texte de passer à la ligne */
+  overflow: visible; /* évite que le texte soit coupé */
 }
 
 .bouchon {
