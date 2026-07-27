@@ -1,98 +1,109 @@
 const cardsContainer = document.getElementById('cards');
 
-const NB_JOURS = 30;
-
 // ===============================
-// PERSONNALISATION DES TEXTES
+// PLANNING - AJOUTEZ VOS DATES ICI
 // ===============================
-// ATTENTION: ces données mentionnent "La Tranche sur Mer", qui ne
-// correspond pas à Meaux (la ville indiquée dans le footer et la
-// meta description du site). Il faut remplacer ce planning par les
-// vrais marchés/jours/lieux de Meaux avant la mise en ligne.
+// Chaque ligne = un jour de marché.
+// - date   : format 'AAAA-MM-JJ'
+// - texte2 : première ligne de texte de la carte (ex: nom de la ville)
+// - texte3 : deuxième ligne de texte de la carte (ex: lieu précis)
+//
+// Dès que la date est dépassée, la carte disparaît automatiquement
+// du site au changement de jour (minuit) : pas besoin de la supprimer
+// à la main. Pour ajouter un nouveau jour, il suffit d'ajouter une
+// ligne dans le tableau ci-dessous, à n'importe quel endroit (le
+// tri par date se fait automatiquement).
+const planning = [
+  { date: '2026-07-27', texte2: 'Jard-sur-mer', texte3: 'Place des Ormeaux' },
+  { date: '2026-07-28', texte2: 'La Tranche-sur-mer', texte3: 'Centre Ville' },
+  { date: '2026-07-29', texte2: 'La Tranche-sur-mer', texte3: 'Parking de la Grière' },
+  { date: '2026-07-30', texte2: 'La Faute-sur-mer', texte3: 'Place de la Mairie' },
+  { date: '2026-07-31', texte2: 'L\'Aiguillon-sur-mer', texte3: 'Place de la Mairie' },
+  { date: '2026-08-01', texte2: 'La Tranche-sur-mer', texte3: 'Centre Ville' },
+  { date: '2026-08-02', texte2: 'La Faute-sur-mer', texte3: 'Route de la Pointe d\'Arçay' },
+  { date: '2026-08-03', texte2: 'Jard-sur-mer', texte3: 'Place des Ormeaux' },
+  { date: '2026-08-04', texte2: 'La Tranche-sur-mer', texte3: 'Centre Ville' },
+  { date: '2026-08-05', texte2: 'La Tranche-sur-mer', texte3: 'Parking de la Grière' },
+  { date: '2026-08-06', texte2: 'La Faute-sur-mer', texte3: 'Place de la Mairie' },
+  { date: '2026-08-07', texte2: 'L\'Aiguillon-sur-mer', texte3: 'Place de la Mairie' },
+  { date: '2026-08-08', texte2: 'La Tranche-sur-mer', texte3: 'Centre Ville' },
+  { date: '2026-08-09', texte2: 'La Faute-sur-mer', texte3: 'Route de la Pointe d\'Arçay' },
+  { date: '2026-08-10', texte2: 'Jard-sur-mer', texte3: 'Place des Ormeaux' },
+  { date: '2026-08-11', texte2: 'La Tranche-sur-mer', texte3: 'Centre Ville' },
+  { date: '2026-08-12', texte2: 'La Tranche-sur-mer', texte3: 'Parking de la Grière' },
+  { date: '2026-08-13', texte2: 'La Faute-sur-mer', texte3: 'Place de la Mairie' },
+  { date: '2026-08-14', texte2: 'L\'Aiguillon-sur-mer', texte3: 'Place de la Mairie' },
+  { date: '2026-08-15', texte2: 'La Tranche-sur-mer', texte3: 'Centre Ville' },
+  { date: '2026-08-16', texte2: 'La Faute-sur-mer', texte3: 'Route de la Pointe d\'Arçay' },
+  { date: '2026-08-17', texte2: 'Jard-sur-mer', texte3: 'Place des Ormeaux' },
+  { date: '2026-08-18', texte2: 'La Tranche-sur-mer', texte3: 'Centre Ville' },
+  { date: '2026-08-19', texte2: 'La Tranche-sur-mer', texte3: 'Parking de la Grière' },
+  { date: '2026-08-20', texte2: 'La Faute-sur-mer', texte3: 'Place de la Mairie' },
+  { date: '2026-08-21', texte2: 'L\'Aiguillon-sur-mer', texte3: 'Place de la Mairie' },
+  { date: '2026-08-22', texte2: 'La Tranche-sur-mer', texte3: 'Centre Ville' },
+  { date: '2026-08-23', texte2: 'La Faute-sur-mer', texte3: 'Route de la Pointe d\'Arçay' },
+  { date: '2026-08-24', texte2: 'Jard-sur-mer', texte3: 'Place des Ormeaux' },
+  { date: '2026-08-25', texte2: 'La Tranche-sur-mer', texte3: 'Centre Ville' },
+  
 
-// Fonction appelée pour chaque jour
-// index = nombre de jours depuis aujourd'hui
-function getTexts(index) {
-  const textes = [
-    { texte2: 'Pas de', texte3: 'marché' },
-    { texte2: 'Pas de', texte3: 'marché' },
-    { texte2: 'Pas de', texte3: 'marché' },
-    { texte2: 'Pas de', texte3: 'marché' },
-    { texte2: 'La tranche sur mer', texte3: 'Centre Ville' },
-    { texte2: 'La tranche sur mer', texte3: 'Parking de la grière' },
-    { texte2: 'Pas de', texte3: 'marché' },
-    { texte2: 'Pas de', texte3: 'marché' },
-    { texte2: 'La tranche sur mer', texte3: 'Centre Ville' },
-    { texte2: 'La tranche sur mer', texte3: 'La terrière' },
-    { texte2: 'Pas de', texte3: 'marché' },
-    { texte2: 'La tranche sur mer', texte3: 'Centre Ville' },
-    { texte2: 'La tranche sur mer', texte3: 'Parking de la grière' },
-    { texte2: 'Pas de', texte3: 'marché' },
-    { texte2: 'Pas de', texte3: 'marché' },
-    { texte2: 'La tranche sur mer', texte3: 'Centre Ville' },
-    { texte2: 'La tranche sur mer', texte3: 'La terrière' },
-    { texte2: 'Pas de', texte3: 'marché' },
-    { texte2: 'La tranche sur mer', texte3: 'Centre Ville' },
-    { texte2: 'La tranche sur mer', texte3: 'Parking de la grière' },
-    { texte2: 'Pas de', texte3: 'marché' },
-    { texte2: 'Pas de', texte3: 'marché' },
-    { texte2: 'La tranche sur mer', texte3: 'Centre Ville' },
-    { texte2: 'La tranche sur mer', texte3: 'La terrière' },
-    { texte2: 'Pas de', texte3: 'marché' },
-    { texte2: 'La tranche sur mer', texte3: 'Centre Ville' },
-    { texte2: 'La tranche sur mer', texte3: 'Parking de la grière' },
-    { texte2: 'Pas de', texte3: 'marché' },
-    { texte2: 'Pas de', texte3: 'marché' },
-    { texte2: 'La tranche sur mer', texte3: 'Centre Ville' },
-  ];
-
-  // Si aucun texte n'est défini pour ce jour, texte par défaut
-  return (
-    textes[index] || {
-      texte2: 'En',
-      texte3: 'attente',
-    }
-  );
-}
+];
 
 // ===============================
 // CREATION DES CARTES
 // ===============================
 
+// Convertit une chaîne 'AAAA-MM-JJ' en objet Date (heure 00:00 locale)
+function parseDate(dateStr) {
+  const [annee, mois, jour] = dateStr.split('-').map(Number);
+  return new Date(annee, mois - 1, jour);
+}
+
 function afficherCartes() {
   cardsContainer.innerHTML = '';
 
-  const aujourdHui = new Date();
+  const maintenant = new Date();
+  const debutAujourdHui = new Date(
+    maintenant.getFullYear(),
+    maintenant.getMonth(),
+    maintenant.getDate()
+  );
 
-  for (let i = 0; i < NB_JOURS; i++) {
-    const date = new Date(aujourdHui);
-    date.setDate(aujourdHui.getDate() + i);
+  const evenementsAVenir = planning
+    .map((evt) => ({ ...evt, dateObj: parseDate(evt.date) }))
+    // On ne garde que les dates non dépassées (aujourd'hui inclus)
+    .filter((evt) => evt.dateObj >= debutAujourdHui)
+    // Tri chronologique, peu importe l'ordre dans lequel elles ont été ajoutées
+    .sort((a, b) => a.dateObj - b.dateObj);
 
+  evenementsAVenir.forEach((evt) => {
     let dateTexte;
 
-    if (i === 0) {
+    if (evt.dateObj.getTime() === debutAujourdHui.getTime()) {
       dateTexte = "Aujourd'hui";
     } else {
-      dateTexte = date.toLocaleDateString('fr-FR', {
+      dateTexte = evt.dateObj.toLocaleDateString('fr-FR', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',
       });
     }
 
-    const textes = getTexts(i);
+    // Nom du jour (lundi, mardi, ...) avec une majuscule au début
+    const jourBrut = evt.dateObj.toLocaleDateString('fr-FR', { weekday: 'long' });
+    const jourTexte = jourBrut.charAt(0).toUpperCase() + jourBrut.slice(1);
 
     const card = document.createElement('div');
     card.className = 'card';
 
     card.innerHTML = `
+      <div class="jour">${jourTexte}</div>
       <div class="date">${dateTexte}</div>
-      <div class="text2">${textes.texte2}</div>
-      <div class="text3">${textes.texte3}</div>
+      <div class="text2">${evt.texte2}</div>
+      <div class="text3">${evt.texte3}</div>
     `;
 
     cardsContainer.appendChild(card);
-  }
+  });
 }
 
 // ===============================
