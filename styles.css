@@ -206,6 +206,10 @@ img {
   margin-bottom: 28px !important;
 }
 
+.section__header img {
+  padding: 30px
+}
+
 .section__tag {
   color: var(--accent);
 }
